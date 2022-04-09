@@ -4,16 +4,20 @@
 1. Why did Fibonacci fail the testThrowsIllegalArgumentException< test? What (if anything) did
 you have to do to fix it? If you did not have to change anything to fix this issue, explain why.
 
-
+Since the getFibTerm method throws an exception for the non-negative input 0, the fibonacciTest failed.
+I changed the 32nd line of fibonacci.java so that it throws an exception when input is smaller than 0.
 
 2. Why did Fibonacci fail the testBaseCase test? What (if anything) did you have to do to fix
 it? If you did not have to change anything to fix this issue, explain why.
 
-
+Same as above, since it throws an exception for the input 0.
+I changed the 32nd line of fibonacci.java so that it throws an exception when input is smaller than 0.
 
 3.Why did Fibonacci fail the testInductiveCase test? What (if anything) did you have to do to
 fix it? If you did not have to change anything to fix this issue, explain why.
 
+Since the getFibTerm method returns 1 for the input smaller than 2, the result for the getFibTerm(2) was incorrect.
+I changed the 34th line of fibonacci.java so that it returns 1 for inputs smaller than 2.
 
 
 ## Part 8: Debugger Tutorial
@@ -21,14 +25,26 @@ fix it? If you did not have to change anything to fix this issue, explain why.
 1. What are the values of "x", "y", and "sum" printed by your statement? Why was x not equal 
 to the first integer entered here, and how could we fix this?
 
+Values
+x: 4
+y: 4
+sum: 0
 
+This is because the remainder was dropped in the process of dividing the number received as an input by 2 and multiplying by 2 again.
+Change the 29th line to a code that directly stores the input number in x.
 
 2. What are all the names and values listed in the “Variables” panel? What does the “frames” 
 tab list as the current method and line number? (Write down the text that was highlighted when 
 the Debug perspective first opened.)
 
+x = 3
+y = 4
+
+computeSum:43, Adder (setup)
 
 
 3. What are all the names and values listed in the “Variables” panel after each of the two step overs?
 
-
+x = 3
+y = 4
+sum = -1
