@@ -26,7 +26,7 @@ public class RandomHello {
         greetings[3] = "Hallo Welt";
         greetings[4] = "Ciao Mondo";
 
-        int val = randomGenerator.nextInt(4);
+        int val = randomGenerator.nextInt(5);
         return greetings[val];
     }
 }
