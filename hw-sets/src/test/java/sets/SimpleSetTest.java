@@ -8,19 +8,33 @@ import java.util.Arrays;
  * SimpleSetTest is a glassbox test of the SimpleSet class.
  */
 public class SimpleSetTest {
-
   /** Tests calculating the size of a set. */
   @Test
   public void testSize() {
-    // TODO: implement this
-    
+    assertEquals(new SimpleSet(new float[0]).size(), 0, 0.001);
+    assertEquals(new SimpleSet(new float[0]).complement().size(), Float.POSITIVE_INFINITY, 0.001);
+
+    assertEquals(S.size(), 0, 0.001);
+    assertEquals(R.size(), Float.POSITIVE_INFINITY, 0.001);
+
+    assertEquals(S1.size(), 1, 0.001);
+    assertEquals(R1.size(), Float.POSITIVE_INFINITY, 0.001);
+
+    assertEquals(S12.size(), 2, 0.001);
+    assertEquals(R12.size(), Float.POSITIVE_INFINITY, 0.001);
   }
 
   /** Tests converting a set to a string. */
   @Test
   public void testToString() {
-    // TODO: implement this
-    
+    assertEquals(S.toString(), "{}");
+    assertEquals(R.toString(), "R");
+
+    assertEquals(S1.toString(), "{1.0}");
+    assertEquals(R1.toString(), "R \\ {1.0}");
+
+    assertEquals(S12.toString(), "{1.0, 2.0}");
+    assertEquals(R12.toString(), "R \\ {1.0, 2.0}");
   }
 
   private static SimpleSet S = new SimpleSet(new float[0]);

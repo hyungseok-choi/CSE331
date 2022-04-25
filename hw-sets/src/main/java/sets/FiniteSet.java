@@ -46,9 +46,7 @@ public class FiniteSet {
    * @spec.requires vals is sorted, +/-infinity at ends, and has no dups
    * @spec.effects this = {vals[1], vals[2], ..., vals[vals.length-2]}
    */
-  private FiniteSet(float[] vals) {
-    this.vals = vals;
-  }
+  private FiniteSet(float[] vals) { this.vals = vals; }
 
   @Override
   public boolean equals(Object o) {
