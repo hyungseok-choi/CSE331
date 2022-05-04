@@ -8,8 +8,13 @@ interface to a graph. If your design includes multiple classes or interfaces, ex
 included each one; if not, explain whether you considered additional classes and why you decided
 not to include them.
 
+The graph consists of multiple nodes and edges. In particular, the graph implemented this time
+is a multi-directional labeled graph. Therefore, it would be difficult to represent this graph only
+with a simple array or list, so I created Node and Edge classes respectively. With them, I could
+design a more flexible and expandable graph representation.
 
-TODO: Your answer here!
+Since, the most basic operations for graph are adding nodes and edge, and traversing nodes list,
+I added addNode, addEdge, listNodes, and listChildren methods.
 
 
 ## Part 3
@@ -18,5 +23,8 @@ TODO: Your answer here!
 What was your testing strategy for this assignment? How do your script tests and JUnit tests
 differ from each other (if they do), and why?
 
-
-TODO: Your answer here!
+I tested the things that are going to happen with multiple script tests and things that should
+not be happening with multiple Junit tests (e.g., adding duplicate Nodes, adding duplicate Edges).
+Since I deal with most of the basic operations of the Graph class with script test,
+Junit test is simpler than the script test. For each method, I wrote a test for different cases,
+such as the number of elements and the order of inputs.
