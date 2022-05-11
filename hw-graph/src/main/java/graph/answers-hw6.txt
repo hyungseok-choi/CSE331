@@ -17,14 +17,28 @@ A few examples of possible Graph representations:
 representations listed above (for example, in terms of runtime complexity, space
 complexity, or ease of implementation).
 
+A
+advantage: simple implementation for addNode and addEdge method.
+disadvantage: hard to find the relationship between nodes and edges, therefore difficult to implement
+any method with this implementation.
 
+B
+advantage: easy to get child nodes. low space complexity.
+disadvantage: to know whether 2 nodes a and b are connected or not, we have to check all of a and b's
+outgoing edges. high time complexity
+
+C
+advantage: easy to check relationship between 2 nodes.
+disadvantage: high space complexity, difficult to represent multi edges.
 
 
 2. In two to three sentences, describe the representation you chose and explain why you
 chose it. If you chose to use a different representation than one of the three we described
 above, be sure to list its advantages and disadvantages, too.
 
-
+B.
+Since we are implementing a graph with multiple edges with a label, making Node class with a label
+will make it easy to represent that state. Also, it will require less space than C.
 
 
 ## Part 4
@@ -35,11 +49,36 @@ above, be sure to list its advantages and disadvantages, too.
 1. Describe any new tests you added and why you added them, or why you feel that your original
 tests alone are sufficient.
 
-
+Tests are sufficient in that they check various methods, and cases with marginal cases.
+Rather, I deleted one Junit test(testSimpleAddEdge) which tests whether Graph stores edge in lexicographical order or not.
 
 
 2. Did you make any changes to your specifications as you were implementing your Graph? (yes/no)
 If yes, describe your changes and why you made them.
 
+Yes. Changed specs are as below.
 
+REMOVE
+Graph.Node - equals
+-> No need to use this method.
+
+CHANGE
+Graph - listChildren -> throw exception
+-> Better implementation for error handling
+
+ADD
+Grpah.Node addEdge
+-> By using hashSet in Node, need a method that inserts a new edge
+
+Graph.Node getEdges
+Graph.Edge getLabel
+Graph.Edge getdstName
+-> Observer methods with added fields.
+
+Graph.Edge equals
+Graph.Edge hashCode
+-> By using hashSet in Node, need a method that checks Edge class equality.
+
+Graph.Edge toString
+-> To return list of Edges in a specific form (e.g. "dstName(label)")
 
