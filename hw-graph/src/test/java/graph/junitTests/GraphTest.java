@@ -1,11 +1,15 @@
 package graph.junitTests;
 import graph.Graph;
 import org.junit.Test;
+import org.junit.Rule;
+import org.junit.rules.Timeout;
 
 import java.util.Arrays;
 import static org.junit.Assert.*;
 
 public class GraphTest {
+
+    @Rule public Timeout globalTimeout = Timeout.seconds(10); // 10 seconds max per method tested
 
     @Test
     public void testCreation(){
@@ -33,24 +37,6 @@ public class GraphTest {
         Graph g1 = new Graph();
         g1.addNode("n1");
         g1.addNode("n1");
-    }
-
-    @Test
-    public void testSimpleAddEdge(){
-        Graph g1 = new Graph();
-        g1.addNode("n1");
-        g1.addNode("n2");
-
-        g1.addEdge("n1", "n2", "e1");
-
-        assertEquals(Arrays.asList("n2(e1)"),
-                g1.listChildren("n1"));        // a single edge
-
-        g1.addNode("n3");
-        g1.addEdge("n1", "n3", "e2");
-
-        assertEquals(Arrays.asList("n2(e1)", "n3(e2)"),
-                g1.listChildren("n1"));        // multiple edges
     }
 
     @Test(expected = java.util.NoSuchElementException.class)
