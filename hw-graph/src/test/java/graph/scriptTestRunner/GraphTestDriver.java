@@ -30,7 +30,7 @@ public class GraphTestDriver {
      * String -> Graph: maps the names of graphs to the actual graph
      **/
 
-    private final Map<String, graph.Graph> graphs = new HashMap<>();
+    private final Map<String, graph.Graph<String, String>> graphs = new HashMap<>();
     private final PrintWriter output;
     private final BufferedReader input;
 
@@ -115,7 +115,7 @@ public class GraphTestDriver {
     }
 
     private void createGraph(String graphName) {
-        Graph g = new Graph();
+        Graph<String, String> g = new Graph<>();
 
         graphs.put(graphName, g);
         output.println("created graph " + graphName);
@@ -133,7 +133,7 @@ public class GraphTestDriver {
     }
 
     private void addNode(String graphName, String nodeName) {
-         Graph g = graphs.get(graphName);
+         Graph<String, String> g = graphs.get(graphName);
          g.addNode(nodeName);
          output.println("added node " + nodeName + " to " + graphName);
     }
@@ -153,7 +153,7 @@ public class GraphTestDriver {
 
     private void addEdge(String graphName, String parentName, String childName,
                          String edgeLabel) {
-        Graph g = graphs.get(graphName);
+        Graph<String, String> g = graphs.get(graphName);
         g.addEdge(parentName, childName, edgeLabel);
         output.println("added edge " + edgeLabel + " from " + parentName + " to " + childName + " in " + graphName);
     }
@@ -168,7 +168,7 @@ public class GraphTestDriver {
     }
 
     private void listNodes(String graphName) {
-        Graph g = graphs.get(graphName);
+        Graph<String, String> g = graphs.get(graphName);
         List<String> nodes = g.listNodes();
 
         Collections.sort(nodes);
@@ -191,7 +191,7 @@ public class GraphTestDriver {
     }
 
     private void listChildren(String graphName, String parentName) {
-        Graph g = graphs.get(graphName);
+        Graph<String, String> g = graphs.get(graphName);
         List<String> children = g.listChildren(parentName);
 
         Collections.sort(children);

@@ -9,7 +9,7 @@ import java.util.*;
  * parent and child nodes have the same edge label. However, multiple edges
  * may have the same label.
  */
-public class Graph {
+public class Graph<T, E> {
     public static final boolean DEBUG = false;
 
     /**
@@ -25,7 +25,7 @@ public class Graph {
     // RI: nodes != null, nodes' elements != null
     // AF(this) = Vertices (this.nodes.keySet()), Edges (for all value n in this.nodes, n.edges)
 
-    private HashMap<String, Node> nodes;
+    private HashMap<T, Node<T>> nodes;
 
     /**
      * Add a node to the graph.
@@ -35,12 +35,12 @@ public class Graph {
      * @spec.modifies this
      * @spec.effects add a new node with name newNode to this
      */
-    public void addNode(String newNode) {
+    public void addNode(T newNode) {
         if (DEBUG) checkRep();
 
         if (nodes.get(newNode) != null)
             throw new RuntimeException("Duplicate node");
-        this.nodes.put(newNode, new Node(newNode));
+        this.nodes.put(newNode, new Node<T>(newNode));
 
         if (DEBUG) checkRep();
     }
@@ -57,13 +57,13 @@ public class Graph {
      * @spec.modifies this
      * @spec.effects add a new edge with a parent node name srdNode, a child node name dstNode and a label label
      */
-    public void addEdge(String srcNode, String dstNode, String label){
+    public void addEdge(T srcNode, T dstNode, E label){
         if (DEBUG) checkRep();
 
         if (nodes.get(srcNode) == null || nodes.get(dstNode) == null)
             throw new java.util.NoSuchElementException("No such node");
 
-        Node parent = this.nodes.get(srcNode);
+        Node<T> parent = this.nodes.get(srcNode);
         boolean isAdded = parent.addEdge(dstNode, label);
 
         if (!isAdded){
@@ -77,10 +77,10 @@ public class Graph {
      * Return a name of nodes in this Graph in lexicographical order.
      * @return a name of nodes in a lexicographical order.
      */
-    public List<String> listNodes(){
+    public List<T> listNodes(){
         if (DEBUG) checkRep();
 
-        List<String> ret = new ArrayList<>(nodes.keySet());
+        List<T> ret = new ArrayList<>(nodes.keySet());
 
         if (DEBUG) checkRep();
         return ret;
@@ -93,15 +93,15 @@ public class Graph {
      * @return a name of children nodes and label.
      * @spec.requires parentNode != null, parentNode is a name of the node present in the graph
      */
-    public List<String> listChildren(String parentNode){
+    public List<String> listChildren(T parentNode){
         if (DEBUG) checkRep();
 
         if (nodes.get(parentNode) == null){
             throw new java.util.NoSuchElementException("No matching node");
         }
 
-        HashSet<Edge> edges = this.nodes.get(parentNode).getEdges();
-        Iterator<Edge> i = edges.iterator();
+        HashSet<Edge<T, E>> edges = this.nodes.get(parentNode).getEdges();
+        Iterator<Edge<T, E>> i = edges.iterator();
         List<String> ret = new ArrayList<>();
 
         while(i.hasNext()){
@@ -118,7 +118,7 @@ public class Graph {
         assert this.nodes != null : "this.nodes is null!";
 
         // Iterating HashMap through for loop
-        for (Map.Entry<String, Node> set : this.nodes.entrySet()) {
+        for (Map.Entry<T, Node<T>> set : this.nodes.entrySet()) {
             assert set != null : "this.nodes has a null element!";
         }
     }
@@ -126,7 +126,7 @@ public class Graph {
     /**
      * Represents a mutable vertex with a name and a set of edges to which from this
      */
-    public class Node {
+    public class Node<T> {
 
         /**
          * Creates a Node with the name name
@@ -134,7 +134,7 @@ public class Graph {
          * @spec.modifies this
          * @spec.requires name != null
          */
-        public Node(String name) {
+        public Node(T name) {
             this.name = name;
             this.edges = new HashSet<>();
         }
@@ -143,17 +143,17 @@ public class Graph {
         //
         // RI: name != null, edges != null
         // AF(this) = A node named name with outgoing edges in edges
-        private String name;
-        private HashSet<Edge> edges;
+        private T name;
+        private HashSet<Edge<T, E>> edges;
 
         /**
          * return a set of outgoing edges from this.
          * @return a set of outgoing edges from this.
          */
-        public HashSet<Edge> getEdges(){
+        public HashSet<Edge<T,E>> getEdges(){
             if (DEBUG) checkRep();
 
-            HashSet<Edge> ret = new HashSet<>(edges);
+            HashSet<Edge<T, E>> ret = new HashSet<Edge<T, E>>(edges);
 
             if (DEBUG) checkRep();
             return ret;
@@ -168,10 +168,10 @@ public class Graph {
          * @spec.requires dstName, label != null
          * @spec.effects add a new edge from this to a node name dstNode with a label label.
          */
-        public boolean addEdge(String dstName, String label){
+        public boolean addEdge(T dstName, E label) {
             if (DEBUG) checkRep();
 
-            Edge newEdge = new Edge(dstName, label);
+            Edge<T, E> newEdge = new Edge<T, E>(dstName, label);
             boolean isAdded = edges.add(newEdge);
 
             if (DEBUG) checkRep();
@@ -190,7 +190,7 @@ public class Graph {
     /**
      * Represents an immutable edge with a child node with a label.
      */
-    public class Edge {
+    public class Edge<T, E> {
 
         /**
          * Creates an Edge with the label label and a child Node name dstNode
@@ -199,7 +199,7 @@ public class Graph {
          * @spec.modifies this
          * @spec.requires dstNode, label != null
          */
-        public Edge(String dstNode, String label) {
+        public Edge(T dstNode, E label) {
             this.dstName = dstNode;
             this.label = label;
         }
@@ -209,14 +209,14 @@ public class Graph {
         //
         // RI: label != null, dstName != null
         // AF(this) = An edge with label and childnode name dstName.
-        private String label;
-        private String dstName;
+        private T dstName;
+        private E label;
 
         /**
          * return the label of this edge.
          * @return the label of this edge.
          */
-        public String getLabel() {
+        public E getLabel() {
             if (DEBUG) checkRep();
             return label;
         }
@@ -225,7 +225,7 @@ public class Graph {
          * return the name of the destination node of this edge.
          * @return the name of the destination node of this edge.
          */
-        public String getdstName() {
+        public T getdstName() {
             if (DEBUG) checkRep();
             return dstName;
         }
@@ -240,13 +240,13 @@ public class Graph {
         @Override
         public boolean equals(Object o){
             if (DEBUG) checkRep();
-            if (! (o instanceof Edge)){
+            if (! (o instanceof Graph<?, ?>.Edge<?, ?>)){
                 return false;
             }
-            Edge e = (Edge) o;
+            Graph<?, ?>.Edge<?, ?> e = (Graph<?, ?>.Edge<?, ?>) o;
 
             if (DEBUG) checkRep();
-            return Objects.equals(this.label, e.label) && Objects.equals(this.dstName, e.dstName);
+            return this.getdstName().equals(e.getdstName()) && this.getLabel().equals(e.getLabel());
         }
 
         /**
@@ -256,7 +256,7 @@ public class Graph {
         @Override
         public int hashCode(){
             if (DEBUG) checkRep();
-            return this.label.hashCode()*this.dstName.hashCode();
+            return 31*this.label.hashCode()+this.dstName.hashCode();
         }
 
         /**
