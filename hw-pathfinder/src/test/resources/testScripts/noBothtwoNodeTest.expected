@@ -1,0 +1,9 @@
+created graph simpleGraph
+
+added node A to simpleGraph
+added node B to simpleGraph
+
+added edge 1.000 from A to B in simpleGraph
+
+unknown: C
+unknown: D
