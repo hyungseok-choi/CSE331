@@ -64,7 +64,7 @@ public class Graph<T, E> {
             throw new java.util.NoSuchElementException("No such node");
 
         Node<T> parent = this.nodes.get(srcNode);
-        boolean isAdded = parent.addEdge(dstNode, label);
+        boolean isAdded = parent.addEdge(srcNode, dstNode, label);
 
         if (!isAdded){
             throw new RuntimeException("Duplicate edge with same srcNode, dstNode and label");
@@ -93,20 +93,14 @@ public class Graph<T, E> {
      * @return a name of children nodes and label.
      * @spec.requires parentNode != null, parentNode is a name of the node present in the graph
      */
-    public List<String> listChildren(T parentNode){
+    public Set<Edge<T, E>> listChildren(T parentNode){
         if (DEBUG) checkRep();
 
         if (nodes.get(parentNode) == null){
             throw new java.util.NoSuchElementException("No matching node");
         }
 
-        HashSet<Edge<T, E>> edges = this.nodes.get(parentNode).getEdges();
-        Iterator<Edge<T, E>> i = edges.iterator();
-        List<String> ret = new ArrayList<>();
-
-        while(i.hasNext()){
-            ret.add(i.next().toString());
-        }
+        Set<Edge<T, E>> ret = this.nodes.get(parentNode).getEdges();
 
         if (DEBUG) checkRep();
         return ret;
@@ -161,6 +155,7 @@ public class Graph<T, E> {
 
         /**
          * Add a new edge from this to a node name dstNode with a label label
+         * @param srcName name of a node from which the edge to dstNode
          * @param dstName name of a node to which the edge from srcNode
          * @param label label of the edge.
          * @return true if no duplicate edge, else false
@@ -168,10 +163,10 @@ public class Graph<T, E> {
          * @spec.requires dstName, label != null
          * @spec.effects add a new edge from this to a node name dstNode with a label label.
          */
-        public boolean addEdge(T dstName, E label) {
+        public boolean addEdge(T srcName, T dstName, E label) {
             if (DEBUG) checkRep();
 
-            Edge<T, E> newEdge = new Edge<T, E>(dstName, label);
+            Edge<T, E> newEdge = new Edge<T, E>(srcName, dstName, label);
             boolean isAdded = edges.add(newEdge);
 
             if (DEBUG) checkRep();
@@ -190,16 +185,18 @@ public class Graph<T, E> {
     /**
      * Represents an immutable edge with a child node with a label.
      */
-    public class Edge<T, E> {
+    public static class Edge<T, E> {
 
         /**
-         * Creates an Edge with the label label and a child Node name dstNode
+         * Creates an Edge with the label label,  a child Node name dstNode
+         * @param srcName name of a node from which the edge
          * @param dstNode name of a node to which the edge
          * @param label label of the edge
          * @spec.modifies this
          * @spec.requires dstNode, label != null
          */
-        public Edge(T dstNode, E label) {
+        public Edge(T srcName, T dstNode, E label) {
+            this.srcName = srcName;
             this.dstName = dstNode;
             this.label = label;
         }
@@ -207,8 +204,10 @@ public class Graph<T, E> {
         // The label of this edge is a label.
         // The childnode's name of this edge is a dstName
         //
-        // RI: label != null, dstName != null
-        // AF(this) = An edge with label and childnode name dstName.
+        // RI: label != null, dstName != null, srcName != null
+        // AF(this) = An edge with label this.label which parentnode name is srcName and
+        // childnode name is dstName.
+        private T srcName;
         private T dstName;
         private E label;
 
@@ -230,6 +229,15 @@ public class Graph<T, E> {
             return dstName;
         }
 
+        /**
+         * return the name of the source node of this edge.
+         * @return the name of the source node of this edge.
+         */
+        public T getsrcName() {
+            if (DEBUG) checkRep();
+            return srcName;
+        }
+
 
         /**
          * Indicates whether some other object is "equal to" this one.
@@ -240,13 +248,13 @@ public class Graph<T, E> {
         @Override
         public boolean equals(Object o){
             if (DEBUG) checkRep();
-            if (! (o instanceof Graph<?, ?>.Edge<?, ?>)){
+            if (! (o instanceof Graph.Edge<?, ?>)){
                 return false;
             }
-            Graph<?, ?>.Edge<?, ?> e = (Graph<?, ?>.Edge<?, ?>) o;
+            Graph.Edge<?, ?> e = (Graph.Edge<?, ?>) o;
 
             if (DEBUG) checkRep();
-            return this.getdstName().equals(e.getdstName()) && this.getLabel().equals(e.getLabel());
+            return this.getsrcName().equals(e.getsrcName()) && this.getdstName().equals(e.getdstName()) && this.getLabel().equals(e.getLabel());
         }
 
         /**
@@ -272,6 +280,9 @@ public class Graph<T, E> {
         private void checkRep(){
             // Assert this.label is not a null
             assert this.label != null : "this.label is null!";
+
+            // Assert this.dstName is not a null
+            assert this.srcName != null : "this.dstName is null!";
 
             // Assert this.dstName is not a null
             assert this.dstName != null : "this.dstName is null!";

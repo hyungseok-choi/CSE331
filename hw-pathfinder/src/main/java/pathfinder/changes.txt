@@ -1,4 +1,6 @@
 Briefly list any changes you made to your graph class during hw-pathfinder, and why you made those changes.
 
-- Generify
-Add generic type for each Graph, Node and Edge constructors and methods.
+- Add generic type for each Graph, Node and Edge constructors and methods.
+- Change Edge class to static class
+- Change return type of Graph.listChildren from List<String> to Set<Edge>
+- Add srcName as a field of Edge class
