@@ -192,13 +192,21 @@ public class GraphTestDriver {
 
     private void listChildren(String graphName, String parentName) {
         Graph<String, String> g = graphs.get(graphName);
-        List<String> children = g.listChildren(parentName);
+        List<Graph.Edge<String, String>> edges = new ArrayList<>(g.listChildren(parentName));
 
-        Collections.sort(children);
+        edges.sort(new Comparator<Graph.Edge<String, String>>() {
+            @Override
+            public int compare(Graph.Edge<String, String> o1, Graph.Edge<String, String> o2) {
+                if (o1.getdstName().equals(o2.getdstName())) {
+                    return o1.getLabel().compareTo(o2.getLabel());
+                }
+                return o1.getdstName().compareTo(o2.getdstName());
+            }
+        });
 
         StringBuilder sb = new StringBuilder("the children of " + parentName + " in " + graphName + " are:");
-        for (int i = 0; i < children.size(); i++){
-            sb.append(" " + children.get(i));
+        for (Graph.Edge<String, String> edge : edges) {
+            sb.append(" ").append(edge.toString());
         }
         output.println(sb);
     }
