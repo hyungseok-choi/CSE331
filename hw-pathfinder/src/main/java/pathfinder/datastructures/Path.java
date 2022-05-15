@@ -81,7 +81,7 @@ public class Path<T> implements Iterable<Path<T>.Segment<T>> {
         //
         Path<T> extendedPath = new Path<>(start);
         extendedPath.path.addAll(this.path);
-        extendedPath.path.add(new Segment(this.getEnd(), newEnd, segmentCost));
+        extendedPath.path.add(new Segment<T>(this.getEnd(), newEnd, segmentCost));
         extendedPath.cost = this.cost + segmentCost;
         //
         extendedPath.checkRep();
