@@ -30,10 +30,10 @@ public class Graph<T, E> {
     /**
      * Add a node to the graph.
      * @throws RuntimeException when there exist node with the same name
-     * @param newNode a name of the new node
-     * @spec.requires newNode != null, and no dups with the existing Node names
+     * @param newNode a label of the new node
+     * @spec.requires newNode != null, and no dups with the existing Node label
      * @spec.modifies this
-     * @spec.effects add a new node with name newNode to this
+     * @spec.effects add a new node with label newNode to this
      */
     public void addNode(T newNode) {
         if (DEBUG) checkRep();
@@ -47,15 +47,15 @@ public class Graph<T, E> {
 
     /**
      * Add a new edge with parent node srdNode, child node dstNode and label label
-     * @throws java.util.NoSuchElementException when no node with a name srcNode or dstNode
+     * @throws java.util.NoSuchElementException when no node with label srcNode or dstNode
      * @throws RuntimeException when there exist edge with the same srdNode, dstNode, and label
-     * @param srcNode name of a node from which the edge to dstNode
-     * @param dstNode name of a node to which the edge from srcNode
+     * @param srcNode label of a node from which the edge to dstNode
+     * @param dstNode label of a node to which the edge from srcNode
      * @param label label of the edge.
-     * @spec.requires srcNode, dstNode, label != null, srcNode and dstNode are name of nodes present in the graph
+     * @spec.requires srcNode, dstNode, label != null, srcNode and dstNode are label of nodes present in the graph
      * there should be no edges consisting of the same srdNode, dstNode, and label in the graph
      * @spec.modifies this
-     * @spec.effects add a new edge with a parent node name srdNode, a child node name dstNode and a label label
+     * @spec.effects add a new edge with a parent node label srdNode, a child node label dstNode and a label label
      */
     public void addEdge(T srcNode, T dstNode, E label){
         if (DEBUG) checkRep();
@@ -74,8 +74,8 @@ public class Graph<T, E> {
     }
 
     /**
-     * Return a name of nodes in this Graph in lexicographical order.
-     * @return a name of nodes in a lexicographical order.
+     * Return a list of label of nodes in this Graph.
+     * @return a list of label of nodes.
      */
     public List<T> listNodes(){
         if (DEBUG) checkRep();
@@ -87,11 +87,11 @@ public class Graph<T, E> {
     }
 
     /**
-     * Return a name and a label of the parentNode's children nodes
-     * @param parentNode a name of parent node
-     * @throws java.util.NoSuchElementException when no node with a name parentNode
-     * @return a name of children nodes and label.
-     * @spec.requires parentNode != null, parentNode is a name of the node present in the graph
+     * Return a set of edge which consists of each node's label and edge label
+     * @param parentNode a label of parent node
+     * @throws java.util.NoSuchElementException when no node with a label parentNode
+     * @return a set of edge which consists of each node's label and edge label
+     * @spec.requires parentNode != null, parentNode is a label of the node present in the graph
      */
     public Set<Edge<T, E>> listChildren(T parentNode){
         if (DEBUG) checkRep();
@@ -118,13 +118,13 @@ public class Graph<T, E> {
     }
 
     /**
-     * Represents a mutable vertex with a name and a set of edges to which from this
+     * Represents a mutable vertex with a label and a set of edges to which from this
      */
     public class Node<T> {
 
         /**
-         * Creates a Node with the name name
-         * @param name a name of the Node
+         * Creates a node with the label name
+         * @param name a label of the Node
          * @spec.modifies this
          * @spec.requires name != null
          */
@@ -133,10 +133,10 @@ public class Graph<T, E> {
             this.edges = new HashSet<>();
         }
 
-        // The name of this Node is a name. Edges are stored in a HashSet edges,
+        // The label of this Node is a name. Edges are stored in a HashSet edges,
         //
         // RI: name != null, edges != null
-        // AF(this) = A node named name with outgoing edges in edges
+        // AF(this) = A node labeled name with outgoing edges in edges
         private T name;
         private HashSet<Edge<T, E>> edges;
 
@@ -154,14 +154,14 @@ public class Graph<T, E> {
         }
 
         /**
-         * Add a new edge from this to a node name dstNode with a label label
-         * @param srcName name of a node from which the edge to dstNode
-         * @param dstName name of a node to which the edge from srcNode
+         * Add a new edge from this to a node label dstNode with a label label
+         * @param srcName label of a node from which the edge to dstNode
+         * @param dstName label of a node to which the edge from srcNode
          * @param label label of the edge.
          * @return true if no duplicate edge, else false
          * @spec.modifies this
          * @spec.requires dstName, label != null
-         * @spec.effects add a new edge from this to a node name dstNode with a label label.
+         * @spec.effects add a new edge from this to a node label dstNode with a label label.
          */
         public boolean addEdge(T srcName, T dstName, E label) {
             if (DEBUG) checkRep();
@@ -188,9 +188,9 @@ public class Graph<T, E> {
     public static class Edge<T, E> {
 
         /**
-         * Creates an Edge with the label label,  a child Node name dstNode
-         * @param srcName name of a node from which the edge
-         * @param dstNode name of a node to which the edge
+         * Creates an Edge with the label label, a child Node label dstNode
+         * @param srcName label of a node from which the edge
+         * @param dstNode label of a node to which the edge
          * @param label label of the edge
          * @spec.modifies this
          * @spec.requires dstNode, label != null
@@ -202,7 +202,7 @@ public class Graph<T, E> {
         }
 
         // The label of this edge is a label.
-        // The childnode's name of this edge is a dstName
+        // The childnode's label of this edge is a dstName
         //
         // RI: label != null, dstName != null, srcName != null
         // AF(this) = An edge with label this.label which parentnode name is srcName and
@@ -221,8 +221,8 @@ public class Graph<T, E> {
         }
 
         /**
-         * return the name of the destination node of this edge.
-         * @return the name of the destination node of this edge.
+         * return the label of the destination node of this edge.
+         * @return the label of the destination node of this edge.
          */
         public T getdstName() {
             if (DEBUG) checkRep();
@@ -230,8 +230,8 @@ public class Graph<T, E> {
         }
 
         /**
-         * return the name of the source node of this edge.
-         * @return the name of the source node of this edge.
+         * return the label of the source node of this edge.
+         * @return the label of the source node of this edge.
          */
         public T getsrcName() {
             if (DEBUG) checkRep();
