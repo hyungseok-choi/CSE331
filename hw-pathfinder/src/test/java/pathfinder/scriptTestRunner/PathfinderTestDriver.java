@@ -240,22 +240,17 @@ public class PathfinderTestDriver {
         }
 
         sb.append("path from " + srcName + " to " + dstName + ":").append("\n");
-        try{
-            Path<String> path = Dijkstra.findPath(g, srcName, dstName);
-
+        Path<String> path = Dijkstra.findPath(g, srcName, dstName);
+        if (path == null)
+            sb.append("no path found");
+        else{
             for (Path<String>.Segment<String> ss : path) {
                 sb.append(ss.getStart() + " to " + ss.getEnd() + " with weight " + String.format("%.3f", ss.getCost())).append("\n");
-
-//                sb.append(stringSegment).append("\n");
-//                A to B with weight 1.000
             }
             sb.append(String.format("total cost: %.3f", path.getCost()));
 
-        } catch(RuntimeException e){
-            sb.append("no path found");
-        } finally {
-            output.println(sb);
         }
+        output.println(sb);
     }
 
     /**

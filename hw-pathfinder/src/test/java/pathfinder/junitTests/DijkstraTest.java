@@ -35,14 +35,14 @@ public class DijkstraTest {
         g2.addEdge("A", "D", 6.0);
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testNoElemException(){
         Dijkstra.findPath(g1, "A", "B");
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test()
     public void testNoPathException(){
-        Dijkstra.findPath(g2, "B", "A");
+        assertNull(Dijkstra.findPath(g2, "B", "A"));
     }
 
     @Test

@@ -15,15 +15,14 @@ public class Dijkstra{
      * @param graph a graph with any type of node label and Double type edge label
      * @param srcNode starting node for dijkstra algorithm
      * @param dstNode destination node for dijkstra algorithm
-     * @throws NoSuchElementException when graph doesn't contain srcNode or dstNode
-     * @throws RuntimeException when there are no paths from srcNode to dstNode
-     * @return a list of shortest path from srcNode to dstNode and total costs.
+     * @throws IllegalArgumentException when graph doesn't contain srcNode or dstNode
+     * @return null if path from srcNode to dstNode doesn't exist else a list of shortest path from srcNode to dstNode and total costs
      * @spec.requires graph, srcNode, dstNode not null, Graph contains srcNode and a path from srcNode to dstNode.
      */
     public static <T> Path<T> findPath(Graph<T, Double> graph, T srcNode, T dstNode){
 
         if (!graph.listNodes().contains(srcNode) || !graph.listNodes().contains(dstNode)){
-            throw new NoSuchElementException("graph doesn't contain Node");
+            throw new IllegalArgumentException("graph doesn't contain Node");
         }
 
         T start = srcNode;
@@ -58,6 +57,6 @@ public class Dijkstra{
             }
             finished.add(minDest);
         }
-        throw new RuntimeException("no path found");
+        return null;
     }
 }
