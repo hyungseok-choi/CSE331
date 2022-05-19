@@ -22,6 +22,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *  Represent buildings and path data.
+ *  Each building data consist of shortName, longName, and coordinate on map.
+ *  Each path data consist of start, end coordinate on map, and cost.
+ */
 public class CampusMap implements ModelAPI {
 
     static final Map<String, String> buildingName;
@@ -59,29 +64,43 @@ public class CampusMap implements ModelAPI {
             double dst_y = campusPath.getY2();
             double cost = campusPath.getDistance();
 
-            // add node
-            try{
-                campusGraph.addNode(new Point(src_x, src_y));
-            } catch (RuntimeException e){
+            // add nodes to campusGraph
+            Point src = new Point(src_x, src_y);
+            Point dst = new Point(dst_x, dst_y);
+            if (!campusGraph.listNodes().contains(src))
+                campusGraph.addNode(src);
 
-            }
+            if (!campusGraph.listNodes().contains(dst))
+                campusGraph.addNode(dst);
 
-            try{
-                campusGraph.addNode(new Point(dst_x, dst_y));
-            } catch (RuntimeException e) {
-
-            }
-
-            // add to campusGraph Edge
+            // add Edges to campusGraph
             campusGraph.addEdge(new Point(src_x, src_y), new Point(dst_x, dst_y), cost);
         }
     }
 
+    // shortName and longName for buildings are stored in hashMap buildingName.
+    // shortName and coordinate for buildings are stored in hashMap buildingCor.
+    // every path's start and end points with their cost are stored in Graph campusGraph
+    //
+    // RI: buildingName, buildingCor, campusGraph != null
+    // AF(this) = short name for buildings = {buildingName.keySet()}
+    //            long name for buildings = {buildingName.values()}
+    //            possible paths in campus = {all Edges in campusGraph}
+
+    /**
+     * @param shortName The short name of a building to query.
+     * @return {@literal true} iff the short name provided exists in this campus map.
+     */
     @Override
     public boolean shortNameExists(String shortName) {
         return buildingName.containsKey(shortName);
     }
 
+    /**
+     * @param shortName The short name of a building to look up.
+     * @return The long name of the building corresponding to the provided short name.
+     * @throws IllegalArgumentException if the short name provided does not exist.
+     */
     @Override
     public String longNameForShort(String shortName) {
         if (!shortNameExists(shortName))
@@ -89,11 +108,25 @@ public class CampusMap implements ModelAPI {
         return buildingName.get(shortName);
     }
 
+    /**
+     * @return A mapping from all the buildings' short names to their long names in this campus map.
+     */
     @Override
     public Map<String, String> buildingNames() {
         return Map.copyOf(buildingName);
     }
 
+    /**
+     * Finds the shortest path, by distance, between the two provided buildings.
+     *
+     * @param startShortName The short name of the building at the beginning of this path.
+     * @param endShortName   The short name of the building at the end of this path.
+     * @return A path between {@code startBuilding} and {@code endBuilding}, or {@literal null}
+     * if none exists.
+     * @throws IllegalArgumentException if {@code startBuilding} or {@code endBuilding} are
+     *                                  {@literal null}, or not valid short names of buildings in
+     *                                  this campus map.
+     */
     @Override
     public Path<Point> findShortestPath(String startShortName, String endShortName) {
         try{
@@ -104,7 +137,6 @@ public class CampusMap implements ModelAPI {
         } catch (Exception e){
             throw new IllegalArgumentException("Invalid arguments");
         }
-
     }
 
 }
