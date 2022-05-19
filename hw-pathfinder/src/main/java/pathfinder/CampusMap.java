@@ -34,13 +34,16 @@ public class CampusMap implements ModelAPI {
     static final Graph<Point, Double> campusGraph;
 
     static {
+        // Load data from ../../resources/data/[fileName]
         List<CampusBuilding> buildings = CampusPathsParser.parseCampusBuildings("campus_buildings.csv");
         List<CampusPath> paths = CampusPathsParser.parseCampusPaths("campus_paths.csv");
 
+        // create new HashMap and Graph classes
         buildingName = new HashMap<>();
         buildingCor = new HashMap<>();
         campusGraph = new Graph<>();
 
+        // looping over parsed building data to store them
         for (CampusBuilding campusBuilding : buildings) {
             String sName = campusBuilding.getShortName();
             String lName = campusBuilding.getLongName();
@@ -57,6 +60,7 @@ public class CampusMap implements ModelAPI {
             campusGraph.addNode(new Point(bld_x, bld_y));
         }
 
+        // looping over parsed path data to store them
         for (CampusPath campusPath : paths) {
             double src_x = campusPath.getX1();
             double src_y = campusPath.getY1();
@@ -64,9 +68,10 @@ public class CampusMap implements ModelAPI {
             double dst_y = campusPath.getY2();
             double cost = campusPath.getDistance();
 
-            // add nodes to campusGraph
+            // add nodes to campusGraph if it's not already stored in the campusGraph
             Point src = new Point(src_x, src_y);
             Point dst = new Point(dst_x, dst_y);
+
             if (!campusGraph.listNodes().contains(src))
                 campusGraph.addNode(src);
 
@@ -74,7 +79,7 @@ public class CampusMap implements ModelAPI {
                 campusGraph.addNode(dst);
 
             // add Edges to campusGraph
-            campusGraph.addEdge(new Point(src_x, src_y), new Point(dst_x, dst_y), cost);
+            campusGraph.addEdge(src, dst, cost);
         }
     }
 
@@ -93,6 +98,7 @@ public class CampusMap implements ModelAPI {
      */
     @Override
     public boolean shortNameExists(String shortName) {
+        if (DEBUG) checkRep();
         return buildingName.containsKey(shortName);
     }
 
@@ -103,6 +109,7 @@ public class CampusMap implements ModelAPI {
      */
     @Override
     public String longNameForShort(String shortName) {
+        if (DEBUG) checkRep();
         if (!shortNameExists(shortName))
             throw new IllegalArgumentException("shortName does not exist");
         return buildingName.get(shortName);
@@ -113,6 +120,7 @@ public class CampusMap implements ModelAPI {
      */
     @Override
     public Map<String, String> buildingNames() {
+        if (DEBUG) checkRep();
         return Map.copyOf(buildingName);
     }
 
@@ -129,6 +137,7 @@ public class CampusMap implements ModelAPI {
      */
     @Override
     public Path<Point> findShortestPath(String startShortName, String endShortName) {
+        if (DEBUG) checkRep();
         try{
             Point srcPoint = buildingCor.get(startShortName);
             Point dstPoint = buildingCor.get(endShortName);
@@ -137,6 +146,18 @@ public class CampusMap implements ModelAPI {
         } catch (Exception e){
             throw new IllegalArgumentException("Invalid arguments");
         }
+    }
+
+    private static boolean DEBUG = false;
+    private void checkRep() {
+        // Assert buildingName is not a null
+        assert buildingName != null : "buildingName is null!";
+
+        // Assert buildingName is not a null
+        assert buildingCor != null : "buildingName is null!";
+
+        // Assert buildingName is not a null
+        assert buildingName != null : "buildingName is null!";
     }
 
 }
