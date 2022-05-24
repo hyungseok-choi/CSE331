@@ -10,20 +10,30 @@
  */
 
 import React, { Component } from "react";
-import EdgeList from "./EdgeList";
+import EdgeList  from "./EdgeList";
 import Map from "./Map";
 
 // Allows us to write CSS styles inside App.css, any styles will apply to all components inside <App />
 import "./App.css";
 
-interface AppState {}
+interface AppState {
+    val: Edge[] | null;
+}
+
+type Edge = {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+    color: string;
+}
 
 class App extends Component<{}, AppState> { // <- {} means no props.
 
   constructor(props: any) {
     super(props);
     this.state = {
-      // TODO: store edges in this state
+        val: null
     };
   }
 
@@ -32,13 +42,15 @@ class App extends Component<{}, AppState> { // <- {} means no props.
       <div>
         <h1 id="app-title">Line Mapper!</h1>
         <div>
-          {/* TODO: define props in the Map component and pass them in here */}
-          <Map />
+          <Map
+              value = {this.state.val}
+          />
         </div>
         <EdgeList
           onChange={(value) => {
-            // TODO: Modify this onChange callback to store the edges in the state
-            console.log("EdgeList onChange", value);
+              this.setState({
+                  val: value
+              });
           }}
         />
       </div>

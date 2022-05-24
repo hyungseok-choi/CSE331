@@ -19,14 +19,38 @@ import { UW_LATITUDE_CENTER, UW_LONGITUDE_CENTER } from "./Constants";
 // This defines the location of the map. These are the coordinates of the UW Seattle campus
 const position: LatLngExpression = [UW_LATITUDE_CENTER, UW_LONGITUDE_CENTER];
 
-interface MapProps {
-  // TODO: Define the props of this component. You will want to pass down edges
-  // so you can render them here
+type Edge = {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+    color: string;
 }
 
-interface MapState {}
+interface MapProps {
+    value: Edge[] | null;
+}
+
+interface MapState {
+}
 
 class Map extends Component<MapProps, MapState> {
+    constructor(props: MapProps) {
+        super(props);
+    }
+
+    drawLine(val: Edge[] | null): JSX.Element[]{
+        let result: JSX.Element[] = [];
+        if (val === null){
+            return result;
+        }
+        for(let i = 0; i < val.length; i++){
+            let e = val[i];
+            result.push(<MapLine key={i} color={e.color} x1={e.x1} y1={e.y1} x2={e.x2} y2={e.y2}/>);
+        }
+        return result;
+    }
+
   render() {
     return (
       <div id="map">
@@ -40,10 +64,7 @@ class Map extends Component<MapProps, MapState> {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {
-            // TODO: Render map lines here using the MapLine component. E.g.
-            // <MapLine key={key1} color="red" x1={1000} y1={1000} x2={2000} y2={2000}/>
-            // will draw a red line from the point 1000,1000 to 2000,2000 on the
-            // map 
+              this.drawLine(this.props.value)
           }
         </MapContainer>
       </div>
