@@ -12,6 +12,15 @@
 package campuspaths;
 
 import campuspaths.utils.CORSFilter;
+import com.google.gson.Gson;
+import pathfinder.CampusMap;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+import spark.Spark;
+
+import java.util.Locale;
+import java.util.Map;
 
 public class SparkServer {
 
@@ -22,8 +31,30 @@ public class SparkServer {
         // React application to make requests to the Spark server, even though it
         // comes from a different server.
         // You should leave these two lines at the very beginning of main().
+        CampusMap map = new CampusMap();
 
-        // TODO: Create all the Spark Java routes you need here.
+        Spark.get("/bldnames", new Route() {
+            @Override
+            public Object handle(Request request, Response response) throws Exception {
+                Map<String, String> blds = map.buildingNames();
+                Gson gson = new Gson();
+                return gson.toJson(blds.keySet().toArray());
+            }
+        });
+
+        Spark.get("/minpath", new Route() {
+            @Override
+            public Object handle(Request request, Response response) throws Exception {
+                String startBld = request.queryParams("s");
+                String endBld = request.queryParams("e");
+                if(startBld == null || endBld == null || !map.shortNameExists(startBld) || !map.shortNameExists(endBld)) {
+                    Spark.halt(400);
+                }
+                Gson gson = new Gson();
+                return gson.toJson(map.findShortestPath(startBld, endBld));
+            }
+        });
+
     }
 
 }

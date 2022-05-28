@@ -13,12 +13,46 @@ import React, {Component} from 'react';
 
 // Allows us to write CSS styles inside App.css, any styles will apply to all components inside <App />
 import "./App.css";
+import BldSelect  from "./BldSelect";
+import Map from "./Map";
 
-class App extends Component<{}, {}> {
+interface AppState {
+    val: Edge[] | null;
+}
+
+type Edge = {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+    color: string;
+}
+
+class App extends Component<{}, AppState> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            val: null
+        };
+    }
 
     render() {
         return (
-            <p>Here's the beginning of your AMAZING CampusPaths GUI!</p>
+            <div>
+                <h1 id="app-title">Find shortest path!</h1>
+                <div>
+                    <Map
+                        value = {this.state.val}
+                    />
+                </div>
+                <BldSelect
+                    onChange={(value) => {
+                        this.setState({
+                            val: value
+                        });
+                    }}
+                />
+            </div>
         );
     }
 
